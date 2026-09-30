@@ -1,0 +1,31 @@
+{
+  "bgm": {
+    "quiet": "bgm-calm-cc0.ogg",
+    "wishChant": "bgm-02-wish-chant.mp3",
+    "unease": "bgm-horror-cc0.ogg",
+    "horrorChant": "bgm-03-horror-suno.mp3",
+    "finalPressure": "bgm-04-final-countdown-suno.mp3"
+  },
+  "sfx": {
+    "enter": "sfx-enter-ritual.wav",
+    "page": "sfx-wood-knock.wav",
+    "ink": null,
+    "sealHold": null,
+    "seal": "sfx-seal-stamp.wav",
+    "woodKnock": "sfx-wood-knock.wav",
+    "confirm": "sfx-choice-bell-heavy.wav",
+    "keep": null,
+    "give": null,
+    "tear": null,
+    "message": "sfx-message-omen.wav",
+    "nameReveal": null,
+    "overlap": "sfx-heartbeat-double.wav",
+    "branchDelete": "sfx-branch-delete.wav",
+    "countdown1": null,
+    "countdown2": null,
+    "countdown3": "sfx-heartbeat-double.wav",
+    "cut": "sfx-terror-hit.wav",
+    "terrorHit": "sfx-terror-hit.wav",
+    "heartbeat": "sfx-heartbeat-double.wav"
+  }
+}

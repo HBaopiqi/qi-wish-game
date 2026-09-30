@@ -1,0 +1,15 @@
+# Local development and credentials
+node_modules/
+.env
+.env.*
+!.env.example
+.codex/
+.agents/
+.taptap/
+.sites-runtime/
+.openai/
+*.log
+*.zip
+*.tar.gz
+Thumbs.db
+.DS_Store

@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#171411" />
+    <meta
+      name="description"
+      content="《祈》——围绕留名、许愿与还愿展开的移动端仪式微恐网页游戏。"
+    />
+    <title>祈</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23efe3c8'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='44' fill='%239f211d'%3E%E7%A5%88%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="loading-screen" class="loading-screen" role="status" aria-live="polite">
+      <div class="loading-sigil" aria-hidden="true"><img src="./assets/images/qi-emblem.png" alt="" /></div>
+      <p id="loading-label">正在展开愿册</p>
+      <div class="loading-track" aria-hidden="true"><i id="loading-progress"></i></div>
+      <span id="loading-percent">3%</span>
+      <small>请稍候，勿离开此页</small>
+    </div>
+    <main id="app" class="app-shell" aria-live="polite">
+      <div class="ambient-frame" aria-hidden="true">
+        <span class="frame-notch frame-notch--top"></span>
+        <span class="frame-notch frame-notch--bottom"></span>
+      </div>
+
+      <aside id="player-thought" class="player-thought" aria-live="polite" hidden>
+        <span id="thought-prefix">未名 ·</span>
+        <p id="thought-text"></p>
+      </aside>
+
+      <div id="text-terror" class="text-terror" aria-hidden="true"></div>
+
+      <section id="entry-veil" class="entry-veil" aria-labelledby="entry-title">
+        <div class="entry-veil__sigil" aria-hidden="true"><i></i></div>
+        <div class="entry-veil__content">
+          <p>游玩前</p>
+          <h1 id="entry-title">请戴上耳机</h1>
+          <span>全屏游玩</span>
+          <button id="enter-game" class="entry-button" type="button" disabled>进入</button>
+        </div>
+      </section>
+
+      <section class="scene scene--cover is-active" data-scene="cover" aria-labelledby="cover-title">
+        <div class="cover-ritual-field" aria-hidden="true">
+          <span class="ritual-axis ritual-axis--vertical"></span>
+          <span class="ritual-axis ritual-axis--horizontal"></span>
+          <span class="ritual-orbit ritual-orbit--outer"></span>
+          <span class="ritual-orbit ritual-orbit--inner"></span>
+          <div class="wish-ring wish-ring--outer">
+            <span style="--i:0"><img class="qi-ring-glyph" src="./assets/images/qi-emblem.png" alt="" /></span><span style="--i:1">愿</span><span style="--i:2">留</span><span style="--i:3">名</span>
+            <span style="--i:4">所</span><span style="--i:5">念</span><span style="--i:6">有</span><span style="--i:7">归</span>
+            <span style="--i:8">一</span><span style="--i:9">念</span><span style="--i:10">既</span><span style="--i:11">起</span>
+            <span style="--i:12">书</span><span style="--i:13">愿</span><span style="--i:14">为</span><span style="--i:15">凭</span>
+            <span style="--i:16">请</span><span style="--i:17">愿</span><span style="--i:18">成</span><span style="--i:19">真</span>
+          </div>
+          <div class="wish-ring wish-ring--inner">
+            <span style="--i:0">名</span><span style="--i:1">为</span><span style="--i:2">引</span><span style="--i:3">愿</span>
+            <span style="--i:4">为</span><span style="--i:5">凭</span><span style="--i:6">所</span><span style="--i:7">求</span>
+            <span style="--i:8">无</span><span style="--i:9">妄</span><span style="--i:10">有</span><span style="--i:11">应</span>
+          </div>
+          <i class="ritual-node ritual-node--north"></i>
+          <i class="ritual-node ritual-node--east"></i>
+          <i class="ritual-node ritual-node--south"></i>
+          <i class="ritual-node ritual-node--west"></i>
+        </div>
+        <div class="cover-folio" aria-hidden="true">愿册 · 子夜录</div>
+        <div class="cover-title-lockup">
+          <p>一念既起</p>
+          <h1 id="cover-title"><img src="./assets/images/qi-emblem.png" alt="祈" /></h1>
+          <span>所念有归</span>
+        </div>
+
+        <div class="cover-footer">
+          <p class="cover-copy">写下一件，你确实希望发生的事。</p>
+          <p class="tonight-count"><span aria-hidden="true">愿</span><b>今夜有 <span class="cover-count-number">27</span> 人留愿</b></p>
+          <button class="paper-tab paper-tab--primary" type="button" data-next="pact">
+            <span>入册</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="scene scene--pact" data-scene="pact" aria-labelledby="pact-title" hidden>
+        <div class="folio-number">入册规矩</div>
+        <div class="pact-heading">
+          <p class="kicker">愿不白取</p>
+          <h2 id="pact-title">先助人愿，<br />后成己愿。</h2>
+          <p>这里是一册由上一位玩家交给下一位的电子愿册。你写下愿望后，须先替十二份陌生愿签决定去处；完成四轮，系统才会接收你的愿望。</p>
+        </div>
+        <ol class="pact-steps" aria-label="入册规矩，须依次展开">
+          <li class="is-unlocked"><button class="pact-rule" type="button"><span>壹</span><div><strong>先写下你的愿望</strong><p>留下称呼与愿望。此时愿望只会暂存，还没有进入愿册。</p><small>轻触展开</small></div></button></li>
+          <li><button class="pact-rule" type="button" disabled><span>贰</span><div><strong>替十二份愿签选择去处</strong><p>留下代表继续等待；转赠代表交给下一位；撕毁代表放弃。四轮共十二张。</p><small>上一条读完后启封</small></div></button></li>
+          <li><button class="pact-rule" type="button" disabled><span>叁</span><div><strong>完成后送出自己的愿望</strong><p>引导员“鹤我这豹脾气”会带你完成流程。四轮结束，你的愿望才会正式入册。</p><small>上一条读完后启封</small></div></button></li>
+        </ol>
+        <blockquote class="pact-reveal" aria-hidden="true">你不是来判断愿望是否值得。<br />你只负责决定：它继续等待、交给别人，还是到此为止。</blockquote>
+        <button class="paper-tab paper-tab--primary pact-enter" type="button" data-next="name" disabled>
+          <span>请依次读完三条规矩</span>
+        </button>
+      </section>
+
+      <section class="scene scene--form" data-scene="name" aria-labelledby="name-title" hidden>
+        <div class="folio-number">壹 · 留名</div>
+        <div class="scene-heading">
+          <p class="kicker">愿有所归，须先留名</p>
+          <h2 id="name-title">愿册如何<br />称呼你？</h2>
+        </div>
+
+        <form id="name-form" class="ritual-form" novalidate>
+          <label class="field-label" for="player-name">你的名字</label>
+          <p class="form-guidance">请填写真实姓名，或你愿意在现实中被称呼的名字。它将成为后续故事对你的唯一称谓。</p>
+          <div class="ink-field">
+            <input
+              id="player-name"
+              name="playerName"
+              type="text"
+              maxlength="12"
+              autocomplete="off"
+              aria-describedby="name-error"
+              required
+            />
+            <span class="ink-line" aria-hidden="true"></span>
+          </div>
+          <p id="name-error" class="field-error" role="alert"></p>
+          <button class="paper-tab paper-tab--next" type="submit">
+            <span>以此为名</span><b aria-hidden="true">→</b>
+          </button>
+        </form>
+
+        <p class="margin-note" aria-hidden="true">名落于纸，愿才有归处。</p>
+      </section>
+
+      <section class="scene scene--form" data-scene="wish" aria-labelledby="wish-title" hidden>
+        <div class="folio-number">贰 · 书愿</div>
+        <div class="scene-heading scene-heading--wish">
+          <p class="kicker">不论大小，不问缘由</p>
+          <h2 id="wish-title">请您写下愿望，<br />祈求实现</h2>
+        </div>
+
+        <form id="wish-form" class="ritual-form ritual-form--wish" novalidate>
+          <label class="field-label" for="player-wish">你的愿</label>
+          <p class="form-guidance">请写下此刻真实、具体，并且确实希望发生的愿望。</p>
+          <div class="wish-paper">
+            <span class="paper-thread paper-thread--one" aria-hidden="true"></span>
+            <span class="paper-thread paper-thread--two" aria-hidden="true"></span>
+            <textarea
+              id="player-wish"
+              name="playerWish"
+              minlength="2"
+              maxlength="60"
+              rows="4"
+              aria-describedby="wish-error"
+              required
+            ></textarea>
+            <span id="wish-count" class="character-count">0 / 60</span>
+          </div>
+          <p class="privacy-note">隐私说明：填写内容不会上传至服务器，仅在当前页面会话中临时使用，并将在本次流程结束后自动清除。</p>
+          <p id="wish-error" class="field-error" role="alert"></p>
+          <button class="paper-tab paper-tab--next" type="submit">
+            <span>就写这个</span><b aria-hidden="true">→</b>
+          </button>
+        </form>
+      </section>
+
+      <section class="scene scene--incantation" data-scene="incantation" aria-labelledby="incantation-title" hidden>
+        <div id="incantation-prelude" class="incantation-prelude">
+          <p class="folio-number">叁 · 启祝</p>
+          <div class="prelude-mark" aria-hidden="true"><i></i><span><img src="./assets/images/qi-emblem.png" alt="" /></span></div>
+          <div class="prelude-copy">
+            <p>愿已落纸</p>
+            <h2>静候祝文显现</h2>
+            <span>勿言 · 勿离 · 勿回首</span>
+            <button id="resume-chant" class="resume-chant" type="button" hidden>轻触启祝</button>
+          </div>
+          <div class="prelude-thread" aria-hidden="true"><i></i></div>
+        </div>
+
+        <div id="incantation-ritual" class="incantation-ritual" aria-hidden="true">
+          <div class="folio-number">叁 · 念祝</div>
+          <div class="incantation-head">
+            <p class="kicker">投愿祝</p>
+            <h2 id="incantation-title">祝声既起，随声默诵</h2>
+          </div>
+
+          <div class="incantation-sheet" role="group" aria-label="投愿祝正文">
+            <span class="binding-hole binding-hole--one" aria-hidden="true"></span>
+            <span class="binding-hole binding-hole--two" aria-hidden="true"></span>
+            <p class="incantation-line"><span class="incantation-segment">留名为引，</span><span class="incantation-segment">书愿为凭。</span></p>
+            <p class="incantation-line"><span class="incantation-segment">一念既起，</span><span class="incantation-segment">愿有所应。</span></p>
+            <p class="incantation-line"><span class="incantation-segment">所求无妄，</span><span class="incantation-segment">所念有归。</span></p>
+            <p class="incantation-line incantation-line--last">
+              <span class="incantation-segment">今以此名，</span><span class="incantation-segment"><span class="verb-swap"><span id="verb-normal">请</span><span id="verb-shift" aria-hidden="true">替</span><span>愿</span></span>成真。</span>
+            </p>
+            <div class="personal-inscription">
+              <strong id="inscribed-name">未名</strong>
+            </div>
+          </div>
+
+          <div class="seal-action">
+            <p id="hold-instruction">按住朱印，直到印泥浸透纸面</p>
+            <button id="seal-button" class="seal-button" type="button" aria-describedby="hold-instruction" disabled>
+              <svg class="seal-progress" viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="seal-progress__track" cx="60" cy="60" r="53"></circle>
+                <circle class="seal-progress__value" cx="60" cy="60" r="53"></circle>
+              </svg>
+              <span class="seal-face"><i>落</i><i>印</i></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene scene--registered" data-scene="registered" aria-labelledby="registered-title" hidden>
+        <div class="registered-mark" aria-hidden="true">
+          <span>记</span><span>名</span>
+        </div>
+        <div class="registered-content">
+          <p class="kicker">朱印已落</p>
+          <h2 id="registered-title">记名已成</h2>
+          <p class="registered-address">
+            此后愿认“<strong id="registered-name">未名</strong>”这个名字，<br />不认执笔的人。
+          </p>
+          <blockquote id="registered-wish">你的愿望</blockquote>
+          <p class="registered-status"><i></i> 正在送往愿册</p>
+        </div>
+        <div class="registered-footer">
+          <button id="preview-next" class="paper-tab paper-tab--primary" type="button">
+            <span>查看第一愿</span>
+          </button>
+          <button class="text-button" type="button" data-reset-game>重新开始</button>
+        </div>
+      </section>
+
+      <section class="scene scene--round" data-scene="wish-round" aria-labelledby="wish-round-title" hidden>
+        <div class="round-heading">
+          <div>
+            <p id="round-kicker" class="kicker">第一愿 · 入愿</p>
+            <h2 id="wish-round-title">三张愿签</h2>
+          </div>
+          <span id="round-progress">零 / 三</span>
+        </div>
+
+        <aside class="guide-note" aria-label="引导员留言">
+          <span class="guide-mark" aria-hidden="true">鹤</span>
+          <p><strong>鹤我这豹脾气</strong><br /><span id="round-guide">每张愿签，各择一种去处。</span></p>
+        </aside>
+        <p id="round-live-feedback" class="round-live-feedback" aria-live="polite"></p>
+
+        <div id="wish-round-cards" class="wish-stack" aria-label="本轮愿签">
+          <button class="wish-card is-selected" type="button" data-wish-index="0" aria-pressed="true">
+            <span class="wish-card__number">签一</span>
+            <strong>希望明天是个晴天</strong>
+            <span class="wish-card__trace"></span>
+            <span class="wish-card__result">待择</span>
+          </button>
+          <button class="wish-card" type="button" data-wish-index="1" aria-pressed="false">
+            <span class="wish-card__number">签二</span>
+            <strong>希望今晚睡个好觉</strong>
+            <span class="wish-card__trace"></span>
+            <span class="wish-card__result">待择</span>
+          </button>
+          <button class="wish-card" type="button" data-wish-index="2" aria-pressed="false">
+            <span class="wish-card__number">签三</span>
+            <strong>希望吃到喜欢的东西</strong>
+            <span class="wish-card__trace"></span>
+            <span class="wish-card__result">待择</span>
+          </button>
+        </div>
+
+        <div class="wish-actions" aria-label="愿签去处">
+          <button id="refuse-round" class="refuse-round" type="button" hidden>拒签 · 迫使引导员代填</button>
+          <p>① 点选愿签　② 决定去处　③ 三张完成后确认</p>
+          <div>
+            <button type="button" data-wish-action="keep"><i aria-hidden="true">留</i><span>留下</span></button>
+            <button type="button" data-wish-action="give"><i aria-hidden="true">赠</i><span>转赠</span></button>
+            <button type="button" data-wish-action="tear"><i aria-hidden="true">毁</i><span>撕毁</span></button>
+          </div>
+        </div>
+
+        <div class="choice-controls">
+          <button id="round-reselect" class="text-button" type="button" hidden>重新选择</button>
+          <button id="round-confirm" class="paper-tab paper-tab--next round-confirm" type="button" hidden>
+            <span>落印确认</span><b aria-hidden="true">→</b>
+          </button>
+        </div>
+      </section>
+
+      <section class="scene scene--round-complete" data-scene="round-complete" aria-labelledby="round-complete-title" hidden>
+        <div class="completion-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="round-complete-content">
+          <p id="round-complete-kicker" class="kicker">第一愿 · 已入册</p>
+          <h2 id="round-complete-title">各有所归</h2>
+          <div id="round-summary" class="round-summary"></div>
+          <p id="round-feedback" class="round-feedback"></p>
+          <blockquote>
+            <strong>鹤我这豹脾气</strong>
+            <span id="round-boss-line">挺简单吧？<br />没有正确答案，凭感觉就好。</span>
+          </blockquote>
+        </div>
+        <div class="round-complete-footer">
+          <p id="next-round-label">第二愿正在启封</p>
+          <button id="next-round" class="paper-tab paper-tab--primary" type="button"><span>继续</span></button>
+        </div>
+      </section>
+
+      <section class="scene scene--conversation" data-scene="conversation" aria-labelledby="conversation-title" hidden>
+        <div class="conversation-heading">
+          <div>
+            <p id="conversation-kicker" class="kicker">愿册回话</p>
+            <h2 id="conversation-title">有人正在输入</h2>
+          </div>
+          <span id="conversation-status"><i></i> 在线</span>
+        </div>
+        <div id="conversation-log" class="conversation-log" aria-live="polite"></div>
+        <div id="conversation-typing" class="conversation-typing" hidden><i></i><i></i><i></i><span>正在输入</span></div>
+        <div id="conversation-choices" class="conversation-choices" aria-label="选择回复" hidden></div>
+        <button id="conversation-continue" class="paper-tab paper-tab--primary" type="button" hidden><span>返回愿册</span></button>
+      </section>
+
+      <section class="scene scene--echo" data-scene="echo" aria-labelledby="echo-title" hidden>
+        <div class="echo-heading">
+          <p id="echo-kicker" class="kicker">回执匣 · 三封</p>
+          <h2 id="echo-title">有人回话</h2>
+          <p id="echo-instruction">愿签送达以后，提交者偶尔会留下一句话。请逐封拆开。</p>
+        </div>
+        <div id="echo-envelopes" class="echo-envelopes" aria-label="三封回执">
+          <button type="button" data-echo-index="0" aria-expanded="false"><span><i>一</i><b>未拆</b></span><strong></strong><small></small></button>
+          <button type="button" data-echo-index="1" aria-expanded="false"><span><i>二</i><b>未拆</b></span><strong></strong><small></small></button>
+          <button type="button" data-echo-index="2" aria-expanded="false"><span><i>三</i><b>未拆</b></span><strong></strong><small></small></button>
+        </div>
+        <p id="echo-result" class="echo-result" aria-live="polite">任选一封开始。</p>
+        <button id="echo-continue" class="paper-tab paper-tab--primary" type="button" hidden><span>收起回执</span></button>
+      </section>
+
+      <section class="scene scene--audit" data-scene="audit" aria-labelledby="audit-title" hidden>
+        <div class="audit-heading">
+          <p class="kicker">送达核对</p>
+          <h2 id="audit-title">四组助愿</h2>
+          <p>正在核对前四轮的入册记录。</p>
+        </div>
+        <div class="audit-tally" aria-live="polite">
+          <span>本次共处理</span>
+          <strong id="audit-count">12</strong>
+          <b>张愿签</b>
+        </div>
+        <div class="audit-ledger">
+          <p>签一至签十二　已送达</p>
+          <p id="audit-unexpected" hidden>签十三　无提交时间</p>
+          <p id="audit-owner" hidden>多出的愿签，署名：未名</p>
+        </div>
+        <div id="audit-seals" class="audit-seals" aria-label="十三枚愿签印记" hidden>
+          <button type="button" aria-label="第一枚"><i></i></button><button type="button" aria-label="第二枚"><i></i></button>
+          <button type="button" aria-label="第三枚"><i></i></button><button type="button" aria-label="第四枚"><i></i></button>
+          <button type="button" aria-label="第五枚"><i></i></button><button type="button" aria-label="第六枚"><i></i></button>
+          <button type="button" aria-label="第七枚"><i></i></button><button type="button" aria-label="第八枚"><i></i></button>
+          <button type="button" aria-label="第九枚"><i></i></button><button type="button" aria-label="第十枚"><i></i></button>
+          <button type="button" aria-label="第十一枚"><i></i></button><button type="button" aria-label="第十二枚"><i></i></button>
+          <button type="button" aria-label="第十三枚"><i></i></button>
+        </div>
+        <p id="audit-prompt" class="audit-prompt" hidden>请点出不属于前四轮的那一枚</p>
+        <button id="audit-continue" class="paper-tab paper-tab--primary" type="button" hidden disabled aria-hidden="true">
+          <span>查看多出的愿签</span>
+        </button>
+      </section>
+
+      <section class="scene scene--return-gate" data-scene="return-gate" aria-labelledby="return-gate-title" hidden>
+        <div class="return-seal" aria-hidden="true"><span>还</span></div>
+        <div class="return-gate-copy">
+          <p class="kicker">八愿已入册</p>
+          <h2 id="return-gate-title">愿既许，<br />必当还。</h2>
+          <p>你已替二十四个愿望安排去处。<br />现在，轮到你替下一位安排入口。</p>
+        </div>
+        <button class="paper-tab paper-tab--primary" type="button" data-next="backend"><span>进入还愿</span></button>
+      </section>
+
+      <section class="scene scene--backend" data-scene="backend" aria-labelledby="backend-title" hidden>
+        <div class="backend-heading">
+          <p id="backend-kicker" class="kicker">第九愿 · 还签</p>
+          <h2 id="backend-title">替下一位<br />布置随机</h2>
+          <p id="backend-instruction">选出他最先看到的愿签。</p>
+        </div>
+        <div id="backend-options" class="backend-options"></div>
+        <p id="backend-result" class="backend-result" aria-live="polite"></p>
+        <div class="choice-controls choice-controls--backend">
+          <button id="backend-reselect" class="text-button" type="button" hidden>重新选择</button>
+          <button id="backend-next" class="paper-tab paper-tab--next" type="button" hidden>
+            <span>确认并继续</span><b aria-hidden="true">→</b>
+          </button>
+        </div>
+      </section>
+
+      <section class="scene scene--final-choice" data-scene="final-choice" aria-labelledby="final-choice-title" hidden>
+        <div class="final-choice-heading">
+          <p class="kicker">第十二愿 · 还名</p>
+          <h2 id="final-choice-title">留下一个你</h2>
+          <p class="final-threat">三个版本也在同时选择。<br />最慢的那个，会被另外两个删除。</p>
+          <p id="final-pressure">还有十三秒</p>
+        </div>
+        <div class="self-choices" aria-label="选择留下的自己">
+          <button type="button" data-self-choice="wish"><span>其一</span><strong>写下愿望的你</strong><i>仍在等待实现</i><em>它也在等待</em></button>
+          <button type="button" data-self-choice="witness"><span>其二</span><strong>看见异常的你</strong><i>记得所有删去的分支</i><em>它没有移开视线</em></button>
+          <button type="button" data-self-choice="guide"><span>其三</span><strong>替别人选择的你</strong><i>已经学会如何引导下一位</i><em>它知道按钮在哪里</em></button>
+        </div>
+        <blockquote id="final-boss-line">鹤我这豹脾气：选一个。其余的，我替你删掉。</blockquote>
+        <div id="final-choice-controls" class="choice-controls choice-controls--final" hidden>
+          <button id="final-reselect" class="text-button" type="button">重新选择</button>
+          <button id="final-confirm" class="paper-tab paper-tab--next" type="button">
+            <span>确认留下</span><b aria-hidden="true">→</b>
+          </button>
+        </div>
+      </section>
+
+      <section class="scene scene--false-peace" data-scene="false-peace" aria-labelledby="false-peace-title" hidden>
+        <div class="peace-bottle" aria-hidden="true"><i><img src="./assets/images/qi-emblem.png" alt="" /></i></div>
+        <div class="false-peace-copy">
+          <p id="false-peace-kicker" class="kicker">愿册校验</p>
+          <h2 id="false-peace-title">处理完成</h2>
+          <blockquote id="peace-wish">你的愿望</blockquote>
+          <p id="false-peace-status"><span></span> 正在核对最后一笔记录</p>
+        </div>
+        <button id="view-operator" class="paper-tab paper-tab--primary" type="button" hidden><span>返回愿册</span></button>
+      </section>
+
+      <section class="scene scene--reflection" data-scene="reflection" aria-labelledby="reflection-title" hidden>
+        <div class="reflection-copy">
+          <div class="reflection-top">
+            <p id="reflection-name">未名</p>
+            <h2 id="reflection-title">在线引导员</h2>
+            <span class="reflection-wait">正在确认新访客<i aria-hidden="true"></i></span>
+          </div>
+          <div class="reflection-mirror" aria-hidden="true"></div>
+          <div id="reflection-hook" class="reflection-hook" hidden>
+            <small>新访客已进入</small>
+            <blockquote id="reflection-next-wish">你看到这个新来的人了吗？</blockquote>
+            <b>再靠近一点<i aria-hidden="true"></i></b>
+          </div>
+          <button id="goodbye" class="text-button reflection-goodbye" type="button" hidden>下次见</button>
+        </div>
+      </section>
+
+      <section class="scene scene--epilogue" data-scene="epilogue" aria-labelledby="epilogue-title" hidden>
+        <header class="epilogue-heading">
+          <p class="kicker">祈 · 事后记</p>
+          <h2 id="epilogue-title">第二十八页</h2>
+          <span>愿册真相</span>
+        </header>
+        <article id="epilogue-story" class="epilogue-story">
+          <p data-epilogue-line>子夜以后，那册没有封面的愿册又一次亮了起来。它躺在一块小小的屏幕里，纸色温暖，朱线端正，像一封被人妥善保存了许多年的旧信。一个名叫<span data-epilogue-name>未名</span>的人停在它面前，把名字留在纸上，也把一个不愿轻易告诉旁人的愿望交给了它。</p>
+          <p data-epilogue-line>愿册深处，有人比<span data-epilogue-name>未名</span>更早醒来。那个人自称鹤。他的言语温和、熟练，知道该在什么时候安慰，什么时候催促，也知道怎样让一场陌生的仪式显得顺理成章。很久以前，他也曾坐在屏幕的另一边。那时引导他的声音没有名字，而他和今晚的人一样，相信只要把最后一页翻完，愿望便会抵达某个能够听见的地方。</p>
+          <p data-epilogue-line>纸页一张张经过，陌生人的愿望也相继浮现。有人盼望被认真听完一句话，有人担心姐姐明天的面试，有人只希望回家的公交不要恰好错过。它们平凡得近乎真实。可在那些句子背后，202、071与314的编号不断交换，三段不同的记忆逐渐发出同一个人的声音，像一封被撕碎后又错误拼合的旧信。</p>
+          <p data-epilogue-line>那声音最终记起了一个“舟”字。不是自己的名字，而是女儿名字里仅存的一部分。愿册早已夺走了他的姓名，却没能彻底擦除那个写在纸船上的字。于是202隔着一页页被删除的记录，将自己尚能记住的真相交给<span data-epilogue-name>未名</span>：鹤并非神明，也不是系统。他只是上一位走到终点的人。</p>
+          <p data-epilogue-line>鹤等待的从来不是某个愿望实现。他等待的是另一个人完整地走完这条路，好让愿册承认一次新的交接。只有这样，他的名字才能从引导员的位置上脱落，而另一个名字会被写上去。每一任引导员都曾经是许愿者，也都曾相信自己会成为最后一个离开的人。</p>
+          <p data-epilogue-line>当第八页合拢，<span data-epilogue-name>未名</span>没有按照鹤预想的方式留下空白。那枚印落下时，朱色越过愿望，落在了引导员的全名上。鹤第一次失去了从容。他否认那次落印，许诺归还愿望，又借系统的口吻发出警告；可旧规则已经认出了他的名字。愿册不懂得怜悯，也不懂得反悔，它只执行最后一次完整的署名。</p>
+          <p data-epilogue-line>鹤的声音消失以前，说自己最初只是希望永远有人记得这个名字。愿册确实实现了它。许多陌生人读过、怀疑过，也在最后亲手写下过“鹤我这豹脾气”。愿望被实现得如此准确，以至于它成了一道无法离开的门。</p>
+          <p data-epilogue-line>短暂的寂静之后，页面恢复了最初温和的颜色。系统宣布任务完成，并把<span data-epilogue-name>未名</span>亲手写下的愿望重新展示出来。随后，句子里的字开始一个接一个地改变，仿佛纸下有另一支看不见的笔，耐心地将那份愿望校正为愿册唯一需要的模样：希望下一位替我继续祈愿。</p>
+          <p data-epilogue-line>最后，屏幕熄灭了。黑色玻璃中只剩下一张靠近的脸。愿册问：看见这个新来的人了吗？那并不是从别处进入的访客，而是它刚刚辨认出的第二十八位读者。至于<span data-epilogue-name>未名</span>，名字已经去了屏幕的另一边，开始学习用熟悉而温和的语气，迎接下一次亮起。</p>
+          <blockquote data-epilogue-line>后来再没有人知道，“祈”究竟是祈求的祈，还是一声未能说完的托付。<br />人们只知道，每当愿册翻开，总有一个愿望抵达，也总有另一个人留下。</blockquote>
+        </article>
+        <div id="epilogue-ending" class="epilogue-ending" hidden>
+          <p class="epilogue-thanks">谢谢游玩</p>
+          <div class="epilogue-emblem" aria-label="祈"><img src="./assets/images/qi-emblem.png" alt="" /></div>
+          <p class="epilogue-credit">制作者<br /><strong>HBaopiqi-鹤我这豹脾气</strong></p>
+          <blockquote class="epilogue-blessing"><span>愿你许下的愿望，</span><span>终有一天被世界听见。</span><span>也愿它成真时，</span><span>你仍是最初写下它的人。</span></blockquote>
+          <small>游戏至此结束</small>
+        </div>
+        <button id="close-ledger" class="paper-tab paper-tab--primary epilogue-close" type="button" hidden><span>愿望成真</span></button>
+      </section>
+
+      <div id="knock-flash" class="knock-flash" aria-hidden="true"></div>
+      <p id="sr-status" class="sr-only" role="status"></p>
+    </main>
+
+    <audio id="quiet-bgm" preload="none" loop></audio>
+    <audio id="wish-chant-bgm" src="./assets/audio/bgm-02-wish-chant.mp3" preload="auto" playsinline></audio>
+    <audio id="unease-bgm" preload="none" loop></audio>
+    <audio id="horror-chant-bgm" preload="none" loop></audio>
+    <audio id="final-pressure-bgm" preload="none" loop></audio>
+
+    <script src="./game.js" defer></script>
+  </body>
+</html>
