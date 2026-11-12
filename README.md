@@ -1,71 +1,74 @@
-# 祈
+[简体中文](README.zh-CN.md) · [English](README.md) · [日本語](README.ja.md)
 
-**愿望成真以前，先替它决定代价。**
+# Qi / 祈
 
-![祈 · 游戏封面](docs/images/cover.jpg)
+**Before a wish comes true, decide what it will cost.**
 
-《祈》是一款为手机竖屏设计的互动叙事微恐网页游戏，由 **HBaopiqi－鹤我这豹脾气** 制作。你将写下一个名字和一个愿望，替陌生人的愿签决定去处，再等待自己的愿望入册。
+![Qi game cover](docs/images/cover.jpg)
 
-愿册承诺：先助人愿，后成己愿。可当编号开始重复、来信变得熟悉、选项在你触碰之前自行落定，你还能守住最初写下的那句话吗？
+*Qi* is an interactive narrative browser game with mild horror, designed for portrait play on a phone and created by **HBaopiqi · 鹤我这豹脾气**. Write down a name and a wish, decide what happens to strangers' wish slips, and wait for your own wish to enter the ledger.
 
-[在线游玩《祈》](https://qi-wish-ledger.hbaopiqi.chatgpt.site)
+The ledger promises: help others' wishes first, and your own will follow. But when numbers begin to repeat, letters feel familiar, and choices settle themselves before you touch them, can you still hold on to the words you wrote at the start?
 
-## 如何游玩
+[Play Qi online](https://qi-wish-ledger.hbaopiqi.chatgpt.site)
 
-建议使用手机竖屏并戴上耳机。首次进入时，点击进入以启用声音；随后阅读入册规矩、填写称呼与愿望，跟随祝文完成落印。
+The game's narrative and interface are in Chinese.
 
-在助愿过程中，先点选愿签，再为它选择留下、转赠或撕毁。留意来信、愿签背面与操作记录的变化。游戏后段包含叙事性的界面异常和强制选择。
+## How to play
 
-内容包含惊吓、闪烁、压迫音效及支持设备上的振动反馈。网页振动由设备和浏览器决定，部分 iPhone 浏览器不支持 Web Vibration API。
+Use your phone in portrait orientation and wear headphones. On your first visit, tap to enter and enable sound. Read the ledger's rules, enter your name and wish, and follow the ritual text to press your seal.
 
-## 游戏特色
+When helping others with their wishes, select a wish slip, then choose to keep it, pass it on, or tear it up. Watch for changes in the letters, the backs of wish slips, and the activity log. Later sections include intentional interface disturbances and forced choices as part of the story.
 
-- 留名、许愿、念祝与按住落印组成的仪式流程。
-- 愿签处置、来信对话与记录核验交织推进的故事。
-- 累积显现的祝文、变化的选项与逐步失控的界面。
-- 多阶段背景音乐、独立音效与触感反馈。
-- 融入玩家称呼和愿望的结尾叙事。
+The game contains scares, flashing effects, unsettling audio, and vibration feedback on supported devices. Web vibration depends on the device and browser; some iPhone browsers do not support the Web Vibration API.
 
-## 画面
+## Features
 
-| 愿册入口 | 愿签抉择 |
+- A ritual of entering a name, making a wish, reading an invocation, and pressing and holding to stamp a seal
+- A story that unfolds through decisions about wish slips, incoming letters, and checking records
+- Gradually revealed ritual text, changing choices, and an interface that increasingly slips out of your control
+- Background music across multiple stages, separate sound effects, and haptic feedback
+- An ending that incorporates the player's name and wish
+
+## Screenshots
+
+| Entering the ledger | Choosing a wish slip's fate |
 | --- | --- |
-| ![愿册入口](docs/images/ritual.png) | ![愿签抉择](docs/images/wish-choice.png) |
+| ![Ledger entry](docs/images/ritual.png) | ![Wish slip choices](docs/images/wish-choice.png) |
 
-## 本地运行
+## Run locally
 
-项目使用原生 HTML、CSS 与 JavaScript，不需要构建或安装前端依赖。请通过静态服务器运行，以正常加载音频配置和资源。
+The project uses plain HTML, CSS, and JavaScript. No build step or frontend dependency installation is required. Use a static server so that audio configuration and assets load correctly.
 
-安装 Python 后，在仓库目录执行：
+With Python installed, run this in the repository directory:
 
 ```sh
 python -m http.server 8080
 ```
 
-然后打开 `http://localhost:8080/`。也可使用编辑器的静态预览服务。
+Then open `http://localhost:8080/`. An editor's static preview server also works.
 
-## 部署
+## Deployment
 
-将 `index.html`、`styles.css`、`game.js` 和整个 `assets/` 目录上传至静态网站服务。资源使用相对路径，支持网站根目录和子目录部署。推荐 HTTPS。
+Upload `index.html`, `styles.css`, `game.js`, and the complete `assets/` directory to a static hosting service. Assets use relative paths, so deployment works at either the site root or a subdirectory. HTTPS is recommended.
 
-详细方法见 [部署说明](docs/DEPLOYMENT.md)。游戏内容与音视频都在本仓库内，无需数据库或服务端程序。
+See the [deployment guide](docs/DEPLOYMENT.md) for details. The game content, audio, and visual assets are included in this repository; no database or server-side application is needed. The linked deployment and privacy documents are in Chinese.
 
-## 目录
+## Directory structure
 
 ```text
 .
-├── index.html          # 场景与界面结构
-├── styles.css          # 布局、响应式样式和视觉效果
-├── game.js             # 剧情、交互、音频与触感逻辑
+├── index.html          # Scenes and interface structure
+├── styles.css          # Layout, responsive styles, and visual effects
+├── game.js             # Story, interaction, audio, and haptic logic
 ├── assets/
-│   ├── audio/          # 背景音乐、音效和配置
-│   └── images/         # 字标与仪式纹样
-└── docs/               # 部署、隐私和素材说明
+│   ├── audio/          # Background music, sound effects, and configuration
+│   └── images/         # Wordmark and ritual patterns
+└── docs/               # Deployment, privacy, and asset documentation
 ```
 
-## 隐私
+## Privacy
 
-游戏没有账号注册、数据库或分析统计。玩家填写的称呼与愿望保存在当前标签页的 `sessionStorage` 中，用于本次叙事；游戏代码不会将这些输入发送到服务器。完整流程结束时清除相关数据，关闭标签页后会话数据通常也会释放。
+The game has no account registration, database, or analytics. The name and wish you enter are stored in the current tab's `sessionStorage` for this playthrough; the game code does not send these inputs to a server. Related data is cleared when the full story ends. Closing the tab also normally releases its session data.
 
-网站托管服务可能记录正常访问日志。详见 [隐私说明](docs/PRIVACY.md)。
-
+The hosting provider may keep standard access logs. See the [privacy notice](docs/PRIVACY.md).
